@@ -1,0 +1,122 @@
+---
+swagger: '2.0'
+info:
+  description: Документация описывает формат сообщений об изменении статуса инвойса (платежа) в платежной системе
+  version: '1.0'
+  title: Webhook events documentation
+  termsOfService: 'http://rbkmoney.com/'
+  contact:
+    name: RBKmoney support team
+    email: support@rbk.money
+    url: 'https://api.rbk.money'
+schemes:
+  - https
+consumes:
+  - application/json; charset=utf-8
+produces:
+  - application/json; charset=utf-8
+parameters:
+  requestID:
+    name: X-Signature
+    in: header
+    description: Подпись сообщения, созданная приватным ключом RSA с алгоритмом хэширования SHA-256 и размером ключа 1024.
+    required: true
+    type: string
+tags:
+- name: Invoicing
+  description: Обработка сообщения по инвойсу из платежной системы
+paths:
+  "/api/v1/hook/process":
+    post:
+      tags:
+      - Invoicing
+      summary: Обработка сообщения по инвойсу (платежу) из платежной системы
+      operationId: processNotificationUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - "*/*"
+      parameters:
+      - in: body
+        name: invoiceInfo
+        description: Тело запроса, содержащее необходимую информацию об инвойсе (платеже)
+        required: true
+        schema:
+          "$ref": "#/definitions/InvoiceInfo"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/InvoiceInfoResponse"
+        '400':
+          description: Bad Request
+          schema:
+            "$ref": "#/definitions/InvoiceInfoResponse"
+        '500':
+          description: Internal Error
+definitions:
+  InvoiceInfo:
+    type: object
+    required:
+      - amount
+      - created_at
+      - currency
+      - event_type
+      - invoice_id
+      - metadata
+      - metadata
+      - shop_id
+      - status
+    properties:
+      amount:
+        description: Стоимость в минорных денежных единицах
+        type: integer
+        format: int64
+      created_at:
+        description: Дата и время создания
+        type: string
+        format: date-time
+      currency:
+        description: |
+          Валюта, символьный код согласно
+          [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+        type: string
+      event_type:
+        description: Тип сообщения (инвойс или платеж)
+        type: string
+        enum:
+          - invoice
+          - payment
+      invoice_id:
+        description: Идентификатор инвойса
+        type: string
+      metadata:
+        description: Связанные с инвойсом метаданные
+        type: object
+      payment_id:
+        description: Идентификатор платежа (если значение параметра event_type равно payment)
+        type: string
+      shop_id:
+        description: Идентификатор магазина
+        type: integer
+        format: int32
+      status:
+        description: Статус инвойса (или платежа, в зависимости от значения параметра event_type)
+        type: string
+        enum:
+          - unpaid
+          - cancelled
+          - paid
+          - refunded
+          - fulfilled
+          - pending
+          - processed
+          - captured
+          - failed
+  InvoiceInfoResponse:
+    type: object
+    properties:
+      message:
+        description: Дополнительная информация в случае ошибки
+        type: string
+
