@@ -16,7 +16,7 @@ consumes:
 produces:
   - application/json; charset=utf-8
 parameters:
-  requestID:
+  xsignature:
     name: X-Signature
     in: header
     description: Подпись сообщения, созданная приватным ключом RSA с алгоритмом хэширования SHA-256 и размером ключа 1024.
@@ -37,7 +37,7 @@ paths:
       produces:
       - "*/*"
       parameters:
-      - $ref: "#/parameters/requestID"
+      - $ref: "#/parameters/xsignature"
       - in: body
         name: invoiceInfo
         description: Тело запроса, содержащее необходимую информацию об инвойсе (платеже)
