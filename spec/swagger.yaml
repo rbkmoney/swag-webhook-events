@@ -91,7 +91,7 @@ paths:
       produces:
       - "*/*"
       parameters:
-      - $ref: "#/parameters/requestID"
+      - $ref: "#/parameters/xsignature"
       - in: body
         name: invoiceInfo
         description: Тело запроса, содержащее необходимую информацию об инвойсе (платеже)
