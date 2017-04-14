@@ -37,6 +37,7 @@ paths:
       produces:
       - "*/*"
       parameters:
+      - $ref: "#/parameters/requestID"
       - in: body
         name: invoiceInfo
         description: Тело запроса, содержащее необходимую информацию об инвойсе (платеже)
