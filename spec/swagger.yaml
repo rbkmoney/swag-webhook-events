@@ -64,7 +64,6 @@ definitions:
       - event_type
       - invoice_id
       - metadata
-      - metadata
       - shop_id
       - status
     properties:
