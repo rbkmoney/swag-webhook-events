@@ -1,7 +1,13 @@
 ---
 swagger: '2.0'
 info:
-  description: Документация описывает формат сообщений об изменении статуса инвойса (платежа) в платежной системе
+  description: Документация описывает формат сообщений, отправляемых мерчанту на определенные события,
+  происходящие в платежной системе (например, изменение статуса инвойса или платежа).
+  Вебхук — это подписка на такое событие в системе. Он представляет собой url-адрес, тип события и набор фильтров.
+  Когда наступает одно из событий, платежная система выбирает подходящие вебхуки и рассылает сообщения на указанные в них url-адреса.
+  Если подходящих подписок несколько, то события отправляются параллельно на все адреса.
+  Запрос — HTTP-запрос сервера платежной системы к системе мерчанта с информацией о событии.
+  Ответ — HTTP-ответ системы мерчанта на запрос от сервера платежной системы.
   version: '1.0'
   title: Webhook events documentation
   termsOfService: 'http://rbkmoney.com/'
@@ -16,6 +22,13 @@ consumes:
 produces:
   - application/json; charset=utf-8
 parameters:
+  requestID:
+    name: X-Request-ID
+    in: header
+    description: Уникальный идентификатор запроса к системе
+    required: true
+    type: string
+    maxLength: 32
   xsignature:
     name: X-Signature
     in: header
@@ -26,17 +39,14 @@ tags:
 - name: Invoicing
   description: Обработка сообщения по инвойсу из платежной системы
 paths:
-  "/api/v1/hook/process":
+  "/webhook-url":
     post:
       tags:
       - Invoicing
       summary: Обработка сообщения по инвойсу (платежу) из платежной системы
-      operationId: processNotificationUsingPOST
-      consumes:
-      - application/json
-      produces:
-      - "*/*"
+      operationId: processWebhookEvent
       parameters:
+      - $ref: "#/parameters/requestID"
       - $ref: "#/parameters/xsignature"
       - in: body
         name: invoiceInfo
@@ -119,4 +129,3 @@ definitions:
       message:
         description: Дополнительная информация
         type: string
-
