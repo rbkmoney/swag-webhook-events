@@ -1,5 +1,24 @@
 swagger: '2.0'
 info:
+<<<<<<< HEAD
+=======
+  description: Документация описывает формат сообщений, отправляемых мерчанту на определенные события,
+  происходящие в платежной системе (например, изменение статуса инвойса или платежа).
+  Вебхук — это подписка на такое событие в системе. Он представляет собой url-адрес, тип события и набор фильтров.
+  Когда наступает одно из событий, платежная система выбирает подходящие вебхуки и рассылает сообщения на указанные в них url-адреса.
+  Если подходящих подписок несколько, то события отправляются параллельно на все адреса.
+  Список возможных типов событий -
+  >invoice.created
+  >invoice.status.changed
+  >payment.created
+  >payment.status.changed
+  Запрос — HTTP-запрос сервера платежной системы к системе мерчанта с информацией о событии.
+  Ответ — HTTP-ответ системы мерчанта на запрос от сервера платежной системы.
+  Безопасноть.
+  Платежная система подтверждает свою подлинность, подписывая сообщения приватным ключом RSA с алгоритмом хэширования SHA-256.
+  Приватный и публичный ключи задаются в настройках вебхука.
+  Подпись передается в HTTP-заголовке X-Signature в формате Base64.
+>>>>>>> fixed after other comments
   version: '1.0'
   title: RBKmoney Webhooks Events API
   termsOfService: 'http://rbkmoney.com/'
@@ -82,26 +101,24 @@ parameters:
     required: true
     type: string
 tags:
-  - name: EventProcessing
-    description: Обработка сообщения по событию платежной системы
-- name: Invoicing
-  description: Обработка сообщения по инвойсу из платежной системы
+- name: EventProcessing
+  description: Обработка сообщения по собтыию платежной системы
 paths:
   "/webhook-url":
     post:
       tags:
-      - Invoicing
-      summary: Обработка сообщения по инвойсу (платежу) из платежной системы
+      - EventProcessing
+      summary: Обработка сообщения по событию платежной системы
       operationId: processWebhookEvent
       parameters:
       - $ref: "#/parameters/requestID"
       - $ref: "#/parameters/xsignature"
       - in: body
         name: invoiceInfo
-        description: Тело запроса, содержащее необходимую информацию об инвойсе (платеже)
+        description: Тело запроса, содержащее необходимую информацию о событии
         required: true
         schema:
-          "$ref": "#/definitions/InvoiceInfo"
+          "$ref": "#/definitions/EventInfo"
       responses:
         '200':
           description: OK
@@ -114,7 +131,33 @@ paths:
         '500':
           description: Internal Error
 definitions:
+  EventInfo:
+    description: Тело информации о событии в системе
+    type: object
+    required:
+      - event_id
+      - event_time
+      - event_type
+    properties:
+      event_id:
+        description: Идентификатор события в системе
+        type: string
+      event_time:
+        description: Дата и время события
+        type: string
+        format: date-time
+      event_type:
+        description: Тип события (один из списка возможных типов событий)
+        enum:
+          - invoice.created
+          - invoice.status.changed
+          - payment.created
+          - payment.status.changed
+      payload:
+        schema:
+          $ref: "#/definitions/InvoiceInfo"
   InvoiceInfo:
+    description: Тело с детальной инфомацией об инвойсе или платеже
     type: object
     required:
       - amount
