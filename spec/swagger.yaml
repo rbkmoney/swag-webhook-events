@@ -137,6 +137,7 @@ definitions:
             description: Стоимость в минорных денежных единицах
             type: integer
             format: int64
+            minimum: 1
           createdAt:
             description: Дата и время создания
             type: string
@@ -190,6 +191,7 @@ definitions:
             description: Стоимость в минорных денежных единицах
             type: integer
             format: int64
+            minimum: 1
           createdAt:
             description: Дата и время создания
             type: string
