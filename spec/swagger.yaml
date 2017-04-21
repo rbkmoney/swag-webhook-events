@@ -83,7 +83,7 @@ parameters:
     type: string
 tags:
 - name: EventProcessing
-  description: Обработка сообщения по собтыию платежной системы
+  description: Обработка сообщения по событию платежной системы
 paths:
   "/webhook-url":
     post:
