@@ -7,10 +7,15 @@ info:
   Когда наступает одно из событий, платежная система выбирает подходящие вебхуки и рассылает сообщения на указанные в них url-адреса.
   Если подходящих подписок несколько, то события отправляются параллельно на все адреса.
   Список возможных типов событий -
-  >invoice.created
-  >invoice.status.changed
-  >payment.created
-  >payment.status.changed
+             - InvoiceCreated
+             - InvoicePaid
+             - InvoiceCancelled
+             - InvoiceFulfilled
+             - PaymentStarted
+             - PaymentProcessed
+             - PaymentCaptured
+             - PaymentCancelled
+             - PaymentFailed
   Запрос — HTTP-запрос сервера платежной системы к системе мерчанта с информацией о событии.
   Ответ — HTTP-ответ системы мерчанта на запрос от сервера платежной системы.
 
@@ -23,7 +28,7 @@ info:
   Если url-адрес вебхука недоступен или отвечает ошибкой 500, то сервер платежной системы
   будет переотправлять событие 4 раза с интервалами 30сек, 5мин, 15мин, 1час.
   Если и в этом случае не удалось отправить событие, то отправка на данный url останавливается.
-  Очередность отправки событий при этом сохраняется - это означает, что никакие события не могут быть пропущены. 
+  Очередность отправки событий при этом сохраняется - это означает, что никакие события не могут быть пропущены.
   version: '1.0'
   title: Webhook events documentation
   termsOfService: 'http://rbkmoney.com/'
@@ -74,57 +79,55 @@ paths:
         '200':
           description: OK
           schema:
-            "$ref": "#/definitions/InvoiceInfoResponse"
-        '400':
-          description: Bad Request
-          schema:
-            "$ref": "#/definitions/InvoiceInfoResponse"
-        '500':
-          description: Internal Error
+            "$ref": "#/definitions/EventInfoResponse"
 definitions:
   EventInfo:
     description: Тело информации о событии в системе
     type: object
     required:
-      - event_id
-      - event_time
-      - event_type
+      - eventId
+      - eventTime
+      - eventType
     properties:
-      event_id:
+      eventId:
         description: Идентификатор события в системе
         type: string
-      event_time:
+      eventTime:
         description: Дата и время события
         type: string
         format: date-time
-      event_type:
+      eventType:
         description: Тип события (один из списка возможных типов событий)
         enum:
-          - invoice.created
-          - invoice.status.changed
-          - payment.created
-          - payment.status.changed
+          - InvoiceCreated
+          - InvoicePaid
+          - InvoiceCancelled
+          - InvoiceFulfilled
+          - PaymentStarted
+          - PaymentProcessed
+          - PaymentCaptured
+          - PaymentCancelled
+          - PaymentFailed
       payload:
         schema:
           $ref: "#/definitions/InvoiceInfo"
   InvoiceInfo:
-    description: Тело с детальной инфомацией об инвойсе или платеже
+    description: Тело с детальной инфомацией об инвойсе
     type: object
     required:
       - amount
-      - created_at
+      - createdAt
       - currency
-      - event_type
-      - invoice_id
+      - invoiceId
       - metadata
-      - shop_id
+      - shopId
       - status
     properties:
       amount:
         description: Стоимость в минорных денежных единицах
         type: integer
         format: int64
-      created_at:
+      createdAt:
         description: Дата и время создания
         type: string
         format: date-time
@@ -133,27 +136,18 @@ definitions:
           Валюта, символьный код согласно
           [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
         type: string
-      event_type:
-        description: Тип сообщения (инвойс или платеж)
-        type: string
-        enum:
-          - invoice
-          - payment
-      invoice_id:
+      invoiceId:
         description: Идентификатор инвойса
         type: string
       metadata:
         description: Связанные с инвойсом метаданные
         type: object
-      payment_id:
-        description: Идентификатор платежа (если значение параметра event_type равно payment)
-        type: string
-      shop_id:
+      shopId:
         description: Идентификатор магазина
         type: integer
         format: int32
       status:
-        description: Статус инвойса (или платежа, в зависимости от значения параметра event_type)
+        description: Статус инвойса
         type: string
         enum:
           - unpaid
@@ -161,11 +155,55 @@ definitions:
           - paid
           - refunded
           - fulfilled
+  PaymentInfo:
+    description: Тело с детальной инфомацией о платеже
+    type: object
+    required:
+      - amount
+      - createdAt
+      - currency
+      - invoiceId
+      - paymentId
+      - metadata
+      - shopId
+      - status
+    properties:
+      amount:
+        description: Стоимость в минорных денежных единицах
+        type: integer
+        format: int64
+      createdAt:
+        description: Дата и время создания
+        type: string
+        format: date-time
+      currency:
+        description: |
+          Валюта, символьный код согласно
+          [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+        type: string
+      invoiceId:
+        description: Идентификатор инвойса
+        type: string
+      metadata:
+        description: Связанные с инвойсом метаданные
+        type: object
+      paymentId:
+        description: Идентификатор платежа
+        type: string
+      shopId:
+        description: Идентификатор магазина
+        type: integer
+        format: int32
+      status:
+        description: Статус платежа
+        type: string
+        enum:
           - pending
           - processed
           - captured
+          - cancelled
           - failed
-  InvoiceInfoResponse:
+  EventInfoResponse:
     type: object
     properties:
       message:
