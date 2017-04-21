@@ -86,6 +86,7 @@ definitions:
       - eventId
       - eventTime
       - eventType
+      - payload
     properties:
       eventId:
         description: Идентификатор события в системе
