@@ -1,4 +1,3 @@
----
 swagger: '2.0'
 info:
   version: '1.0'
@@ -43,7 +42,6 @@ consumes:
   - application/json; charset=utf-8
 produces:
   - application/json; charset=utf-8
-host: localhost:8084
 parameters:
   requestID:
     name: X-Request-ID
