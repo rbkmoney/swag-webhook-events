@@ -1,34 +1,6 @@
 ---
 swagger: '2.0'
 info:
-  description: Документация описывает формат сообщений, отправляемых мерчанту на определенные события,
-  происходящие в платежной системе (например, изменение статуса инвойса или платежа).
-  Вебхук — это подписка на такое событие в системе. Он представляет собой url-адрес, тип события и набор фильтров.
-  Когда наступает одно из событий, платежная система выбирает подходящие вебхуки и рассылает сообщения на указанные в них url-адреса.
-  Если подходящих подписок несколько, то события отправляются параллельно на все адреса.
-  Список возможных типов событий -
-             - InvoiceCreated
-             - InvoicePaid
-             - InvoiceCancelled
-             - InvoiceFulfilled
-             - PaymentStarted
-             - PaymentProcessed
-             - PaymentCaptured
-             - PaymentCancelled
-             - PaymentFailed
-  Запрос — HTTP-запрос сервера платежной системы к системе мерчанта с информацией о событии.
-  Ответ — HTTP-ответ системы мерчанта на запрос от сервера платежной системы.
-
-  Безопасность.
-  Платежная система подтверждает свою подлинность, подписывая сообщения приватным ключом RSA с алгоритмом хэширования SHA-256.
-  Приватный и публичный ключи задаются в настройках вебхука.
-  Подпись передается в HTTP-заголовке X-Signature в формате Base64.
-
-  Очередь отправки.
-  Если url-адрес вебхука недоступен или отвечает ошибкой 500, то сервер платежной системы
-  будет переотправлять событие 4 раза с интервалами 30сек, 5мин, 15мин, 1час.
-  Если и в этом случае не удалось отправить событие, то отправка на данный url останавливается.
-  Очередность отправки событий при этом сохраняется - это означает, что никакие события не могут быть пропущены.
   version: '1.0'
   title: Webhook events documentation
   termsOfService: 'http://rbkmoney.com/'
@@ -36,12 +8,42 @@ info:
     name: RBKmoney support team
     email: support@rbk.money
     url: 'https://api.rbk.money'
+  description: >
+    Документация описывает формат сообщений, отправляемых мерчанту на определенные события,
+    происходящие в платежной системе (например, изменение статуса инвойса или платежа).
+    Вебхук — это подписка на такое событие в системе. Он представляет собой url-адрес, тип события и набор фильтров.
+    Когда наступает одно из событий, платежная система выбирает подходящие вебхуки и рассылает сообщения на указанные в них url-адреса.
+    Если подходящих подписок несколько, то события отправляются параллельно на все адреса.
+    Список возможных типов событий -
+               - InvoiceCreated
+               - InvoicePaid
+               - InvoiceCancelled
+               - InvoiceFulfilled
+               - PaymentStarted
+               - PaymentProcessed
+               - PaymentCaptured
+               - PaymentCancelled
+               - PaymentFailed
+    Запрос — HTTP-запрос сервера платежной системы к системе мерчанта с информацией о событии.
+    Ответ — HTTP-ответ системы мерчанта на запрос от сервера платежной системы.
+
+    Безопасность.
+    Платежная система подтверждает свою подлинность, подписывая сообщения приватным ключом RSA с алгоритмом хэширования SHA-256.
+    Приватный и публичный ключи задаются в настройках вебхука.
+    Подпись передается в HTTP-заголовке X-Signature в формате Base64.
+
+    Очередь отправки.
+    Если url-адрес вебхука недоступен или отвечает ошибкой 500, то сервер платежной системы
+    будет переотправлять событие 4 раза с интервалами 30сек, 5мин, 15мин, 1час.
+    Если и в этом случае не удалось отправить событие, то отправка на данный url останавливается.
+    Очередность отправки событий при этом сохраняется - это означает, что никакие события не могут быть пропущены.
 schemes:
   - https
 consumes:
   - application/json; charset=utf-8
 produces:
   - application/json; charset=utf-8
+host: localhost:8084
 parameters:
   requestID:
     name: X-Request-ID
@@ -67,19 +69,17 @@ paths:
       summary: Обработка сообщения по событию платежной системы
       operationId: processWebhookEvent
       parameters:
-      - $ref: "#/parameters/requestID"
-      - $ref: "#/parameters/xsignature"
-      - in: body
-        name: invoiceInfo
-        description: Тело запроса, содержащее необходимую информацию о событии
-        required: true
-        schema:
-          "$ref": "#/definitions/EventInfo"
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/xsignature'
+        - in: body
+          name: eventInfo
+          description: Тело запроса, содержащее необходимую информацию о событии
+          required: true
+          schema:
+            $ref: "#/definitions/EventInfo"
       responses:
         '200':
           description: OK
-          schema:
-            "$ref": "#/definitions/EventInfoResponse"
 definitions:
   EventInfo:
     description: Тело информации о событии в системе
@@ -109,103 +109,115 @@ definitions:
           - PaymentCancelled
           - PaymentFailed
       payload:
-        schema:
-          $ref: "#/definitions/InvoiceInfo"
+        $ref: '#/definitions/Payload'
+  Payload:
+    type: object
+    description: Базовая модель
+    discriminator: payloadType
+    required:
+      - payloadType
+    properties:
+      payloadType:
+        type: string
   InvoiceInfo:
-    description: Тело с детальной инфомацией об инвойсе
-    type: object
-    required:
-      - amount
-      - createdAt
-      - currency
-      - invoiceId
-      - metadata
-      - shopId
-      - status
-    properties:
-      amount:
-        description: Стоимость в минорных денежных единицах
-        type: integer
-        format: int64
-      createdAt:
-        description: Дата и время создания
-        type: string
-        format: date-time
-      currency:
-        description: |
-          Валюта, символьный код согласно
-          [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
-        type: string
-      invoiceId:
-        description: Идентификатор инвойса
-        type: string
-      metadata:
-        description: Связанные с инвойсом метаданные
-        type: object
-      shopId:
-        description: Идентификатор магазина
-        type: integer
-        format: int32
-      status:
-        description: Статус инвойса
-        type: string
-        enum:
-          - unpaid
-          - cancelled
-          - paid
-          - refunded
-          - fulfilled
+    allOf:
+      - $ref: '#/definitions/Payload'
+      - type: object
+        description: Тело с детальной информацией об инвойсе
+        required:
+          - amount
+          - createdAt
+          - currency
+          - invoiceId
+          - metadata
+          - shopId
+          - status
+        properties:
+          amount:
+            description: Стоимость в минорных денежных единицах
+            type: integer
+            format: int64
+          createdAt:
+            description: Дата и время создания
+            type: string
+            format: date-time
+          currency:
+            description: |
+              Валюта, символьный код согласно
+              [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+          invoiceId:
+            description: Идентификатор инвойса
+            type: string
+          metadata:
+            description: Связанные с инвойсом метаданные
+            type: object
+          shopId:
+            description: Идентификатор магазина
+            type: integer
+            format: int32
+          status:
+            description: Статус инвойса
+            type: string
+            enum:
+              - unpaid
+              - cancelled
+              - paid
+              - refunded
+              - fulfilled
+          product:
+            description: Наименование предлагаемых товаров или услуг
+            type: string
+          description:
+            description: Описание предлагаемых товаров или услуг
+            type: string
   PaymentInfo:
-    description: Тело с детальной инфомацией о платеже
-    type: object
-    required:
-      - amount
-      - createdAt
-      - currency
-      - invoiceId
-      - paymentId
-      - metadata
-      - shopId
-      - status
-    properties:
-      amount:
-        description: Стоимость в минорных денежных единицах
-        type: integer
-        format: int64
-      createdAt:
-        description: Дата и время создания
-        type: string
-        format: date-time
-      currency:
-        description: |
-          Валюта, символьный код согласно
-          [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
-        type: string
-      invoiceId:
-        description: Идентификатор инвойса
-        type: string
-      metadata:
-        description: Связанные с инвойсом метаданные
-        type: object
-      paymentId:
-        description: Идентификатор платежа
-        type: string
-      shopId:
-        description: Идентификатор магазина
-        type: integer
-        format: int32
-      status:
-        description: Статус платежа
-        type: string
-        enum:
-          - pending
-          - processed
-          - captured
-          - cancelled
-          - failed
-  EventInfoResponse:
-    type: object
-    properties:
-      message:
-        description: Дополнительная информация
-        type: string
+    allOf:
+      - $ref: '#/definitions/Payload'
+      - type: object
+        description: Тело с детальной инфомацией о платеже
+        required:
+          - amount
+          - createdAt
+          - currency
+          - invoiceId
+          - paymentId
+          - metadata
+          - shopId
+          - status
+        properties:
+          amount:
+            description: Стоимость в минорных денежных единицах
+            type: integer
+            format: int64
+          createdAt:
+            description: Дата и время создания
+            type: string
+            format: date-time
+          currency:
+            description: |
+              Валюта, символьный код согласно
+              [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+          invoiceId:
+            description: Идентификатор инвойса
+            type: string
+          metadata:
+            description: Связанные с инвойсом метаданные
+            type: object
+          paymentId:
+            description: Идентификатор платежа
+            type: string
+          shopId:
+            description: Идентификатор магазина
+            type: integer
+            format: int32
+          status:
+            description: Статус платежа
+            type: string
+            enum:
+              - pending
+              - processed
+              - captured
+              - cancelled
+              - failed
