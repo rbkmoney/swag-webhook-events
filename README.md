@@ -1,4 +1,4 @@
-# RBKmoney OpenAPI Specification
+# RBKmoney Webhooks Events API Specification
 
 ## Working on specification
 ### Install
