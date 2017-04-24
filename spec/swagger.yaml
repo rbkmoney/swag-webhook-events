@@ -44,13 +44,6 @@ consumes:
 produces:
   - application/json; charset=utf-8
 parameters:
-  requestID:
-    name: X-Request-ID
-    in: header
-    description: Уникальный идентификатор запроса к системе
-    required: true
-    type: string
-    maxLength: 32
   xsignature:
     name: X-Signature
     in: header
@@ -68,7 +61,6 @@ paths:
       summary: Обработка сообщения по событию платежной системы
       operationId: processWebhookEvent
       parameters:
-        - $ref: '#/parameters/requestID'
         - $ref: '#/parameters/xsignature'
         - in: body
           name: eventInfo
