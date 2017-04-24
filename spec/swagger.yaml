@@ -130,6 +130,7 @@ definitions:
           - invoiceId
           - metadata
           - shopId
+          - partyId
           - status
         properties:
           amount:
@@ -156,6 +157,9 @@ definitions:
             description: Идентификатор магазина
             type: integer
             format: int32
+          partyId:
+            description: Идентификатор участника
+            type: string
           status:
             description: Статус инвойса
             type: string
@@ -184,6 +188,7 @@ definitions:
           - paymentId
           - metadata
           - shopId
+          - partyId
           - status
         properties:
           amount:
@@ -213,6 +218,9 @@ definitions:
             description: Идентификатор магазина
             type: integer
             format: int32
+          partyId:
+            description: Идентификатор участника
+            type: string
           status:
             description: Статус платежа
             type: string
