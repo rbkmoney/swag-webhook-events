@@ -1,0 +1,29 @@
+description: Тело информации о событии в системе
+type: object
+required:
+  - eventId
+  - eventTime
+  - eventType
+  - payload
+properties:
+  eventId:
+    description: Идентификатор события в системе
+    type: string
+  eventTime:
+    description: Дата и время события
+    type: string
+    format: date-time
+  eventType:
+    description: Тип события (один из списка возможных типов событий)
+    enum:
+      - InvoiceCreated
+      - InvoicePaid
+      - InvoiceCancelled
+      - InvoiceFulfilled
+      - PaymentStarted
+      - PaymentProcessed
+      - PaymentCaptured
+      - PaymentCancelled
+      - PaymentFailed
+  payload:
+    $ref: '#/definitions/Payload'

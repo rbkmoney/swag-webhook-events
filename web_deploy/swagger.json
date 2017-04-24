@@ -1,0 +1,266 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "RBKmoney Webhooks Events API",
+    "termsOfService": "http://rbkmoney.com/",
+    "contact": {
+      "name": "RBKmoney support team",
+      "email": "tech-support@rbkmoney.com",
+      "url": "https://api.rbk.money"
+    },
+    "description": "## Webhooks Events API\nДанная спецификация определяет формат сообщений, которые платформа отправляет на созданные вами Webhook-endpoints, обработчики которых необходимо реализовать на стороне вашего серверного кода. Для управления webhook`ами используются методы RBKmoney API, описанные в спецификации [RBKmoney Webhooks Management API](https://rbkmoney.github.io/api#Webhooks).\n## Invoice Webhooks\nWebhook — это подписка на определенное событие либо их группу в платформе RBKmoney. Когда наступает одно из событий в рамках определенного инвойса (например, изменение статуса инвойса или платежа), платформа выбирает подходящие вебхуки и отправляет HTTP POST запрос, содержащий JSON-payload на указанные вами URL. Если подходящих подписок несколько, то события отправляются параллельно на все адреса.\n## Терминология\n\n  Запрос — HTTP-запрос серверов платформы к серверам, обслуживающим ваш серверный код с информацией о событии. \n  Ответ — HTTP-ответ вашего серверного кода на HTTP-запрос от платформы. Запрос на доставку считается успешным только при получении HTTP-кода со статусом \"200\". В случае ответа любым другим кодом статуса платформа будет применять стратегию переотправки запросов до получения успешного ответа, либо до принятия решения о невозможности доставить информацию.\n\n## Стратегия очереди отправки сообщений\nЕсли ваш серверный код отвечает HTTP-кодом со статусом, отличным от \"200\", то платформа будет переотправлять событие 4 раза с интервалами:\n\n  - 30 секунд\n  - 5 минут\n  - 15 минут\n  - 1 час\n\nОчередность отправки событий при этом гарантируется платформой, никакие события не могут быть пропущены.  Если четвертая попытка отправить сообщение оканчивается неудачей, Webhook помечается как выключеный и очередь сообщений для него сбрасывается.\n## Авторизация полученных Webhook`ов\n\n  Платежная система подтверждает свою подлинность, подписывая\nсообщения приватным ключом RSA с алгоритмом хэширования SHA-256. Приватный и публичный ключи задаются в настройках вебхука. Подпись передается в HTTP-заголовке X-Signature в формате Base64.\n## Список передаваемых типов событий\n\n  |    |    |\n  | -- | -- |\n  | InvoiceCreated | Создан новый инвойс |\n  | InvoicePaid | Инвойс перешел в состояние \"Оплачен\" |\n  | InvoiceCancelled | Инвойс отменен по истечению срока давности |\n  | InvoiceFulfilled | Инвойс успешно исполнен, товар доставлен покупателю |\n  | PaymentStarted | Создан платеж |\n  | PaymentProcessed | Платеж принят на обработку | \n  | PaymentCaptured | Платеж успешно завершен |\n  | PaymentCancelled | Платеж отменен |\n  | PaymentFailed | При проведении платежа возникла ошибка |\n"
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json; charset=utf-8"
+  ],
+  "produces": [
+    "application/json; charset=utf-8"
+  ],
+  "parameters": {
+    "xsignature": {
+      "name": "X-Signature",
+      "in": "header",
+      "description": "Подпись сообщения, созданная приватным ключом RSA с алгоритмом хэширования SHA-256 и размером ключа 1024.",
+      "required": true,
+      "type": "string"
+    }
+  },
+  "tags": [
+    {
+      "name": "EventProcessing",
+      "description": "Обработка сообщения по событию платежной системы"
+    }
+  ],
+  "paths": {
+    "/webhook-url": {
+      "post": {
+        "tags": [
+          "EventProcessing"
+        ],
+        "summary": "Обработка сообщения по событию платежной системы",
+        "operationId": "processWebhookEvent",
+        "parameters": [
+          {
+            "$ref": "#/parameters/xsignature"
+          },
+          {
+            "in": "body",
+            "name": "eventInfo",
+            "description": "Тело запроса, содержащее необходимую информацию о событии",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EventInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "EventInfo": {
+      "description": "Тело информации о событии в системе",
+      "type": "object",
+      "required": [
+        "eventId",
+        "eventTime",
+        "eventType",
+        "payload"
+      ],
+      "properties": {
+        "eventId": {
+          "description": "Идентификатор события в системе",
+          "type": "string"
+        },
+        "eventTime": {
+          "description": "Дата и время события",
+          "type": "string",
+          "format": "date-time"
+        },
+        "eventType": {
+          "description": "Тип события (один из списка возможных типов событий)",
+          "enum": [
+            "InvoiceCreated",
+            "InvoicePaid",
+            "InvoiceCancelled",
+            "InvoiceFulfilled",
+            "PaymentStarted",
+            "PaymentProcessed",
+            "PaymentCaptured",
+            "PaymentCancelled",
+            "PaymentFailed"
+          ]
+        },
+        "payload": {
+          "$ref": "#/definitions/Payload"
+        }
+      }
+    },
+    "InvoiceInfo": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Payload"
+        },
+        {
+          "type": "object",
+          "description": "Тело с детальной информацией об инвойсе",
+          "required": [
+            "amount",
+            "createdAt",
+            "currency",
+            "invoiceId",
+            "metadata",
+            "shopId",
+            "partyId",
+            "status"
+          ],
+          "properties": {
+            "amount": {
+              "description": "Стоимость в минорных денежных единицах",
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            },
+            "createdAt": {
+              "description": "Дата и время создания",
+              "type": "string",
+              "format": "date-time"
+            },
+            "currency": {
+              "description": "Валюта, символьный код согласно\n[RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).\n",
+              "type": "string"
+            },
+            "invoiceId": {
+              "description": "Идентификатор инвойса",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Связанные с инвойсом метаданные",
+              "type": "object"
+            },
+            "shopId": {
+              "description": "Идентификатор магазина",
+              "type": "integer",
+              "format": "int32"
+            },
+            "partyId": {
+              "description": "Идентификатор участника",
+              "type": "string"
+            },
+            "status": {
+              "description": "Статус инвойса",
+              "type": "string",
+              "enum": [
+                "unpaid",
+                "cancelled",
+                "paid",
+                "refunded",
+                "fulfilled"
+              ]
+            },
+            "product": {
+              "description": "Наименование предлагаемых товаров или услуг",
+              "type": "string"
+            },
+            "description": {
+              "description": "Описание предлагаемых товаров или услуг",
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "Payload": {
+      "type": "object",
+      "description": "Базовая модель",
+      "discriminator": "payloadType",
+      "required": [
+        "payloadType"
+      ],
+      "properties": {
+        "payloadType": {
+          "type": "string"
+        }
+      }
+    },
+    "PaymentInfo": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Payload"
+        },
+        {
+          "type": "object",
+          "description": "Тело с детальной инфомацией о платеже",
+          "required": [
+            "amount",
+            "createdAt",
+            "currency",
+            "invoiceId",
+            "paymentId",
+            "metadata",
+            "shopId",
+            "partyId",
+            "status"
+          ],
+          "properties": {
+            "amount": {
+              "description": "Стоимость в минорных денежных единицах",
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            },
+            "createdAt": {
+              "description": "Дата и время создания",
+              "type": "string",
+              "format": "date-time"
+            },
+            "currency": {
+              "description": "Валюта, символьный код согласно\n[RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).\n",
+              "type": "string"
+            },
+            "invoiceId": {
+              "description": "Идентификатор инвойса",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Связанные с инвойсом метаданные",
+              "type": "object"
+            },
+            "paymentId": {
+              "description": "Идентификатор платежа",
+              "type": "string"
+            },
+            "shopId": {
+              "description": "Идентификатор магазина",
+              "type": "integer",
+              "format": "int32"
+            },
+            "partyId": {
+              "description": "Идентификатор участника",
+              "type": "string"
+            },
+            "status": {
+              "description": "Статус платежа",
+              "type": "string",
+              "enum": [
+                "pending",
+                "processed",
+                "captured",
+                "cancelled",
+                "failed"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

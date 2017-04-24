@@ -1,0 +1,16 @@
+post:
+  tags:
+    - EventProcessing
+  summary: Обработка сообщения по событию платежной системы
+  operationId: processWebhookEvent
+  parameters:
+    - $ref: '#/parameters/xsignature'
+    - in: body
+      name: eventInfo
+      description: 'Тело запроса, содержащее необходимую информацию о событии'
+      required: true
+      schema:
+        $ref: '#/definitions/EventInfo'
+  responses:
+    '200':
+      description: OK
