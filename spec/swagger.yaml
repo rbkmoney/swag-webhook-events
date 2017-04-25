@@ -23,6 +23,10 @@ info:
       Запрос — HTTP-запрос серверов платформы к серверам, обслуживающим ваш серверный код с информацией о событии. 
       Ответ — HTTP-ответ вашего серверного кода на HTTP-запрос от платформы. Запрос на доставку считается успешным только при получении HTTP-кода со статусом "200". В случае ответа любым другим кодом статуса платформа будет применять стратегию переотправки запросов до получения успешного ответа, либо до принятия решения о невозможности доставить информацию.
 
+    ## Таймауты
+
+      Платформа будет ожидать успешного ответа "200" на HTTP-запрос в течение 10 секунд. По истечению этого времени запрос будет считаться неуспешным и будет применена стратегия переотправки сообщений.
+
     ## Стратегия очереди отправки сообщений
 
     Если ваш серверный код отвечает HTTP-кодом со статусом, отличным от "200", то платформа будет переотправлять событие 4 раза с интервалами:
@@ -67,6 +71,13 @@ consumes:
 produces:
   - application/json; charset=utf-8
 parameters:
+  requestID:
+    name: X-Request-ID
+    in: header
+    description: Уникальный идентификатор запроса к системе
+    required: true
+    type: string
+    maxLength: 32
   xsignature:
     name: X-Signature
     in: header
@@ -75,5 +86,155 @@ parameters:
     required: true
     type: string
 tags:
-  - name: EventProcessing
-    description: Обработка сообщения по событию платежной системы
+- name: EventProcessing
+  description: Обработка сообщения по собтыию платежной системы
+paths:
+  "/webhook-url":
+    post:
+      tags:
+      - EventProcessing
+      summary: Обработка сообщения по событию платежной системы
+      operationId: processWebhookEvent
+      parameters:
+      - $ref: "#/parameters/requestID"
+      - $ref: "#/parameters/xsignature"
+      - in: body
+        name: invoiceInfo
+        description: Тело запроса, содержащее необходимую информацию о событии
+        required: true
+        schema:
+          "$ref": "#/definitions/EventInfo"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/EventInfoResponse"
+definitions:
+  EventInfo:
+    description: Тело информации о событии в системе
+    type: object
+    required:
+      - eventId
+      - eventTime
+      - eventType
+    properties:
+      eventId:
+        description: Идентификатор события в системе
+        type: string
+      eventTime:
+        description: Дата и время события
+        type: string
+        format: date-time
+      eventType:
+        description: Тип события (один из списка возможных типов событий)
+        enum:
+          - InvoiceCreated
+          - InvoicePaid
+          - InvoiceCancelled
+          - InvoiceFulfilled
+          - PaymentStarted
+          - PaymentProcessed
+          - PaymentCaptured
+          - PaymentCancelled
+          - PaymentFailed
+      payload:
+        schema:
+          $ref: "#/definitions/InvoiceInfo"
+  InvoiceInfo:
+    description: Тело с детальной инфомацией об инвойсе
+    type: object
+    required:
+      - amount
+      - createdAt
+      - currency
+      - invoiceId
+      - metadata
+      - shopId
+      - status
+    properties:
+      amount:
+        description: Стоимость в минорных денежных единицах
+        type: integer
+        format: int64
+      createdAt:
+        description: Дата и время создания
+        type: string
+        format: date-time
+      currency:
+        description: |
+          Валюта, символьный код согласно
+          [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+        type: string
+      invoiceId:
+        description: Идентификатор инвойса
+        type: string
+      metadata:
+        description: Связанные с инвойсом метаданные
+        type: object
+      shopId:
+        description: Идентификатор магазина
+        type: integer
+        format: int32
+      status:
+        description: Статус инвойса
+        type: string
+        enum:
+          - unpaid
+          - cancelled
+          - paid
+          - refunded
+          - fulfilled
+  PaymentInfo:
+    description: Тело с детальной инфомацией о платеже
+    type: object
+    required:
+      - amount
+      - createdAt
+      - currency
+      - invoiceId
+      - paymentId
+      - metadata
+      - shopId
+      - status
+    properties:
+      amount:
+        description: Стоимость в минорных денежных единицах
+        type: integer
+        format: int64
+      createdAt:
+        description: Дата и время создания
+        type: string
+        format: date-time
+      currency:
+        description: |
+          Валюта, символьный код согласно
+          [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+        type: string
+      invoiceId:
+        description: Идентификатор инвойса
+        type: string
+      metadata:
+        description: Связанные с инвойсом метаданные
+        type: object
+      paymentId:
+        description: Идентификатор платежа
+        type: string
+      shopId:
+        description: Идентификатор магазина
+        type: integer
+        format: int32
+      status:
+        description: Статус платежа
+        type: string
+        enum:
+          - pending
+          - processed
+          - captured
+          - cancelled
+          - failed
+  EventInfoResponse:
+    type: object
+    properties:
+      message:
+        description: Дополнительная информация
+        type: string
