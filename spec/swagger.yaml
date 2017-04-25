@@ -116,8 +116,7 @@ definitions:
     properties:
       eventId:
         description: Идентификатор события в системе
-        type: integer
-        format: int64
+        type: string
       eventTime:
         description: Дата и время события
         type: string
