@@ -9,6 +9,7 @@ properties:
   eventId:
     description: Идентификатор события в системе
     type: integer
+    format: int64
   eventTime:
     description: Дата и время события
     type: string
