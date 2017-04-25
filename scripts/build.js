@@ -10,10 +10,7 @@ if (process.argv[2]) {
 require('shelljs/global');
 set('-e');
 
-mkdir('-p', TARGET_DIR + '/wsd')
-
 cp('-R', 'web/*', TARGET_DIR + '/');
-cp('-R', 'spec/wsd/*', TARGET_DIR + '/wsd/');
 
 exec('npm run swagger bundle --        -o ' + TARGET_DIR + '/swagger.json');
 exec('npm run swagger bundle -- --yaml -o ' + TARGET_DIR + '/swagger.yaml');

@@ -70,9 +70,8 @@ parameters:
   xsignature:
     name: X-Signature
     in: header
-    description: >-
-      Подпись сообщения, созданная приватным ключом RSA с алгоритмом хеширования
-      SHA-256 и размером ключа 1024.
+    description: >
+      Подпись сообщения, созданная приватным ключом RSA с алгоритмом хеширования SHA-256 и размером ключа 1024.
     required: true
     type: string
 tags:
