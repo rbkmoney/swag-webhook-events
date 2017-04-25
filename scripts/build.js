@@ -10,7 +10,7 @@ if (process.argv[2]) {
 require('shelljs/global');
 set('-e');
 
-mkdir(TARGET_DIR);
+mkdir('-p', TARGET_DIR);
 
 cp('-R', 'web/*', TARGET_DIR + '/');
 
