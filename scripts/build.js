@@ -10,6 +10,8 @@ if (process.argv[2]) {
 require('shelljs/global');
 set('-e');
 
+mkdir(TARGET_DIR);
+
 cp('-R', 'web/*', TARGET_DIR + '/');
 
 exec('npm run swagger bundle --        -o ' + TARGET_DIR + '/swagger.json');
