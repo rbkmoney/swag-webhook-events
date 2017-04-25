@@ -1,3 +1,5 @@
+[![wercker status](https://app.wercker.com/status/ad4c9babc69725d9d19ff2df29ac85bf/s/master "wercker status")](https://app.wercker.com/project/byKey/ad4c9babc69725d9d19ff2df29ac85bf)
+
 # RBKmoney Webhooks Events API Specification
 
 ## Working on specification
