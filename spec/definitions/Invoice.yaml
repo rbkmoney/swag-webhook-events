@@ -35,7 +35,7 @@ properties:
     description: Причина отмены или погашения инвойса
     type: string
   dueDate:
-    description: Дата и время окончания действия
+    description: Дата и время истечения срока жизни
     type: string
     format: date-time
   amount:
