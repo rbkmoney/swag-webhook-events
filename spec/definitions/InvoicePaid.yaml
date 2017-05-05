@@ -1,0 +1,11 @@
+description: |
+  Событие о полной оплате инвойса, являющееся поводом начать предоставление
+  плательщику товаров или услуг
+allOf:
+  - $ref: '#/definitions/Event'
+  - type: object
+    required:
+      - invoice
+    properties:
+      invoice:
+        $ref: '#/definitions/Invoice'

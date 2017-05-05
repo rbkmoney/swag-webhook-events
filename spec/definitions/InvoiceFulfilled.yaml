@@ -1,0 +1,9 @@
+description: Событие о погашении обязательств по инвойсу
+allOf:
+  - $ref: '#/definitions/Event'
+  - type: object
+    required:
+      - invoice
+    properties:
+      invoice:
+        $ref: '#/definitions/Invoice'

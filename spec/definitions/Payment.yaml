@@ -1,0 +1,75 @@
+description: Данные платежа в рамках инвойса
+type: object
+required:
+  - id
+  - createdAt
+  - status
+  - amount
+  - currency
+  - paymentToolToken
+  - paymentSession
+  - contactInfo
+properties:
+  id:
+    description: Идентификатор платежа
+    type: string
+  createdAt:
+    description: Дата и время создания
+    type: string
+    format: date-time
+  status:
+    description: Статус платежа
+    type: string
+    enum:
+      - pending
+      - processed
+      - captured
+      - cancelled
+      - failed
+  error:
+    description: |
+      Описание ошибки, возникшей в процессе проведения платежа, в случае
+      если платёж завершился неуспешно
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+  amount:
+    description: >
+      Стоимость предлагаемых товаров или услуг, в минорных денежных единицах,
+      например в копейках в случае указания российских рублей в качестве валюты.
+    type: integer
+    format: int64
+    minimum: 1
+  currency:
+    description: |
+      Валюта, символьный код согласно
+      [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+    type: string
+  paymentToolToken:
+    description: 'Токен платежного средства, предоставленного плательщиком'
+    type: string
+  paymentSession:
+    description: Идентификатор платежной сессии
+    type: string
+  contactInfo:
+    description: Контактные данные плательщика
+    type: object
+    properties:
+      email:
+        description: Адрес электронной почты
+        type: string
+      phoneNumber:
+        description: Номер мобильного телефона
+        type: string
+  ip:
+    description: IP-адрес плательщика
+    type: string
+  fingerprint:
+    description: Уникальный отпечаток user agent'а плательщика
+    type: string

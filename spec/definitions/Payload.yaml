@@ -1,8 +1,0 @@
-type: object
-description: Базовая модель
-discriminator: payloadType
-required:
-  - payloadType
-properties:
-  payloadType:
-    type: string

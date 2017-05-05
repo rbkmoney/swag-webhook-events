@@ -1,0 +1,12 @@
+description: Событие об успешной обработке платежа
+allOf:
+  - $ref: '#/definitions/Event'
+  - type: object
+    required:
+      - invoice
+      - payment
+    properties:
+      invoice:
+        $ref: '#/definitions/Invoice'
+      payment:
+        $ref: '#/definitions/Payment'

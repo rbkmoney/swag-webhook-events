@@ -1,0 +1,11 @@
+description: |
+  Событие об отмене инвойса с указанной причиной, например в случае истечения
+  его срока жизни
+allOf:
+  - $ref: '#/definitions/Event'
+  - type: object
+    required:
+      - invoice
+    properties:
+      invoice:
+        $ref: '#/definitions/Invoice'

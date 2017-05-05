@@ -1,0 +1,14 @@
+description: |
+  Событие о неуспешном завершении платежа с указанием причины, например в
+  случае отсутствия достаточного количества денежных средств у плательщика
+allOf:
+  - $ref: '#/definitions/Event'
+  - type: object
+    required:
+      - invoice
+      - payment
+    properties:
+      invoice:
+        $ref: '#/definitions/Invoice'
+      payment:
+        $ref: '#/definitions/Payment'
