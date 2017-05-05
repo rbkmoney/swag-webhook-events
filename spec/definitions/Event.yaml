@@ -2,10 +2,9 @@ description: Данные события
 type: object
 discriminator: eventType
 required:
-  - eventId
+  - eventID
   - occuredAt
   - eventType
-  - payload
 properties:
   eventID:
     description: Идентификатор события в системе
