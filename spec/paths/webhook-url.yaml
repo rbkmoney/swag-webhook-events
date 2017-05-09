@@ -1,8 +1,8 @@
 post:
   tags:
     - Event Notifications
-  summary: Обработка оповещения о событии в платформе
-  operationId: processWebhookEvent
+  summary: Оповестить о событии
+  operationId: notifyWebhookEvent
   parameters:
     - $ref: '#/parameters/signature'
     - in: body
