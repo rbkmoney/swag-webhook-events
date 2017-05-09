@@ -3,9 +3,3 @@ description: |
   жизни
 allOf:
   - $ref: '#/definitions/Event'
-  - type: object
-    required:
-      - invoice
-    properties:
-      invoice:
-        $ref: '#/definitions/Invoice'

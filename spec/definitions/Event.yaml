@@ -4,7 +4,9 @@ discriminator: eventType
 required:
   - eventID
   - occuredAt
+  - topic
   - eventType
+  - invoice
 properties:
   eventID:
     description: Идентификатор события в системе
@@ -13,9 +15,14 @@ properties:
     description: Дата и время возникновения события
     type: string
     format: date-time
+  topic:
+    description: Предмет оповещения
+    type: string
+    enum:
+      - InvoicesTopic
   eventType:
     type: string
-    description: Тип произошедшего события
+    description: Тип произошедшего с инвойсом события
     enum:
       - InvoiceCreated
       - InvoicePaid
@@ -26,3 +33,5 @@ properties:
       - PaymentCaptured
       - PaymentCancelled
       - PaymentFailed
+  invoice:
+    $ref: '#/definitions/Invoice'
