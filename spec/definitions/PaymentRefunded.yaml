@@ -1,0 +1,9 @@
+description: Событие об успешном осуществлении возврата платежа
+allOf:
+  - $ref: '#/definitions/Event'
+  - type: object
+    required:
+      - payment
+    properties:
+      payment:
+        $ref: '#/definitions/Payment'

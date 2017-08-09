@@ -25,6 +25,7 @@ properties:
       - processed
       - captured
       - cancelled
+      - refunded
       - failed
   error:
     description: |
