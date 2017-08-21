@@ -59,3 +59,5 @@ properties:
   metadata:
     description: Связанные с инвойсом метаданные
     type: object
+  cart:
+    $ref: '#/definitions/InvoiceCart'
