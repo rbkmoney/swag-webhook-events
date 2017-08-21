@@ -8,8 +8,8 @@ required:
   - dueDate
   - amount
   - currency
-  - metadata
   - product
+  - metadata
 properties:
   id:
     description: Идентификатор инвойса
@@ -50,12 +50,12 @@ properties:
       Валюта, символьный код согласно
       [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
     type: string
-  metadata:
-    description: Связанные с инвойсом метаданные
-    type: object
   product:
     description: Наименование предлагаемых товаров или услуг
     type: string
   description:
     description: Описание предлагаемых товаров или услуг
     type: string
+  metadata:
+    description: Связанные с инвойсом метаданные
+    type: object
