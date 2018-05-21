@@ -20,3 +20,10 @@ properties:
     description: Платежная система
     type: string
     maxLength: 100
+  tokenProvider:
+    description: Провайдер платежных токенов
+    type: string
+    enum:
+      - applepay
+      - googlepay
+      - samsungpay
