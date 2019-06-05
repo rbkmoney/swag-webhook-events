@@ -30,7 +30,7 @@ import java.time.OffsetDateTime;
  * Событие об успешном завершении рефанда
  */
 @Schema(description = "Событие об успешном завершении рефанда")
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T14:43:15.170+03:00[Europe/Moscow]")public class RefundSucceeded extends Event {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T17:32:34.908+03:00[Europe/Moscow]")public class RefundSucceeded extends Event {
 
   @SerializedName("invoice")
   private Invoice invoice = null;

@@ -25,7 +25,7 @@ import java.io.IOException;
  * Родительский платеж, на основе которого создан текущий рекуррентный платеж
  */
 @Schema(description = "Родительский платеж, на основе которого создан текущий рекуррентный платеж")
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T14:43:15.170+03:00[Europe/Moscow]")public class PaymentRecurrentParent {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T17:32:34.908+03:00[Europe/Moscow]")public class PaymentRecurrentParent {
 
   @SerializedName("invoiceID")
   private String invoiceID = null;

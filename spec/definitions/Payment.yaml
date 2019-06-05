@@ -41,6 +41,9 @@ properties:
       Валюта, символьный код согласно
       [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
     type: string
+  metadata:
+    description: Связанные с платежом метаданные
+    type: object
   paymentToolToken:
     description: >
       **Deprecated.** _Используйте свойство `payer`._

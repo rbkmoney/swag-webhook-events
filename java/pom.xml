@@ -5,7 +5,7 @@
   <artifactId>swag-webhook-events</artifactId>
   <packaging>jar</packaging>
   <name>swag-webhook-events</name>
-  <version>1.0.10-SNAPSHOT</version>
+  <version>1.0.11-SNAPSHOT</version>
   <url>https://github.com/swagger-api/swagger-codegen</url>
   <description>Swagger Java</description>
   <scm>
@@ -33,30 +33,6 @@
       <organizationUrl>http://swagger.io</organizationUrl>
     </developer>
   </developers>
-
-  <distributionManagement>
-    <downloadUrl>
-      http://java-nexus.msk1.rbkmoney.net:8081/nexus/content/groups/public
-    </downloadUrl>
-    <repository>
-      <uniqueVersion>false</uniqueVersion>
-      <id>releases</id>
-      <name>RBKmoney releases repository</name>
-      <url>
-        http://java-nexus.msk1.rbkmoney.net:8081/nexus/content/repositories/releases
-      </url>
-      <layout>default</layout>
-    </repository>
-    <snapshotRepository>
-      <uniqueVersion>true</uniqueVersion>
-      <id>snapshots</id>
-      <name>RBKmoney snapshots repository</name>
-      <url>
-        http://java-nexus.msk1.rbkmoney.net:8081/nexus/content/repositories/snapshots
-      </url>
-      <layout>default</layout>
-    </snapshotRepository>
-  </distributionManagement>
 
   <build>
     <plugins>

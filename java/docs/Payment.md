@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **error** | [**PaymentError**](PaymentError.md) |  |  [optional]
 **amount** | **Long** | Стоимость предлагаемых товаров или услуг, в минорных денежных единицах, например в копейках в случае указания российских рублей в качестве валюты.  | 
 **currency** | **String** | Валюта, символьный код согласно [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).  | 
+**metadata** | **Object** | Связанные с платежом метаданные |  [optional]
 **paymentToolToken** | **String** | **Deprecated.** _Используйте свойство &#x60;payer&#x60;._ Токен платежного средства, предоставленного плательщиком  |  [optional]
 **paymentSession** | **String** | **Deprecated.** _Используйте свойство &#x60;payer&#x60;._ Идентификатор платежной сессии  | 
 **contactInfo** | **Object** | **Deprecated.** _Используйте свойство &#x60;payer&#x60;._ Контактные данные плательщика  | 

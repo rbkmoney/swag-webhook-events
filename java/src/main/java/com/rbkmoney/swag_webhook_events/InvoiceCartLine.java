@@ -25,7 +25,7 @@ import java.io.IOException;
  * Позиция товара или услуги
  */
 @Schema(description = "Позиция товара или услуги")
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T14:43:15.170+03:00[Europe/Moscow]")public class InvoiceCartLine {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T17:32:34.908+03:00[Europe/Moscow]")public class InvoiceCartLine {
 
   @SerializedName("product")
   private String product = null;

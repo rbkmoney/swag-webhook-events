@@ -26,7 +26,7 @@ import java.time.OffsetDateTime;
  * Данные рефанда в рамках платежа
  */
 @Schema(description = "Данные рефанда в рамках платежа")
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T14:43:15.170+03:00[Europe/Moscow]")public class Refund {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T17:32:34.908+03:00[Europe/Moscow]")public class Refund {
 
   @SerializedName("id")
   private String id = null;

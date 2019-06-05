@@ -25,7 +25,7 @@ import java.io.IOException;
  * Данные клиентского устройства плательщика
  */
 @Schema(description = "Данные клиентского устройства плательщика")
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T14:43:15.170+03:00[Europe/Moscow]")public class ClientInfo {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T17:32:34.908+03:00[Europe/Moscow]")public class ClientInfo {
 
   @SerializedName("ip")
   private String ip = null;

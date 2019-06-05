@@ -27,7 +27,7 @@ import java.io.IOException;
  * PaymentToolDetailsBankCard
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T14:43:15.170+03:00[Europe/Moscow]")public class PaymentToolDetailsBankCard extends PaymentToolDetails {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T17:32:34.908+03:00[Europe/Moscow]")public class PaymentToolDetailsBankCard extends PaymentToolDetails {
 
   @SerializedName("bin")
   private String bin = null;

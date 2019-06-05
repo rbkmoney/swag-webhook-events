@@ -26,7 +26,7 @@ import java.io.IOException;
  * DigitalWalletDetailsQIWI
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T14:43:15.170+03:00[Europe/Moscow]")public class DigitalWalletDetailsQIWI extends DigitalWalletDetails {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T17:32:34.908+03:00[Europe/Moscow]")public class DigitalWalletDetailsQIWI extends DigitalWalletDetails {
 
   @SerializedName("phoneNumberMask")
   private String phoneNumberMask = null;

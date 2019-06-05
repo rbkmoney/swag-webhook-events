@@ -28,7 +28,7 @@ import java.time.OffsetDateTime;
  * Данные платежа в рамках инвойса
  */
 @Schema(description = "Данные платежа в рамках инвойса")
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T14:43:15.170+03:00[Europe/Moscow]")public class Payment {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T17:32:34.908+03:00[Europe/Moscow]")public class Payment {
 
   @SerializedName("id")
   private String id = null;
@@ -92,6 +92,9 @@ import java.time.OffsetDateTime;
 
   @SerializedName("currency")
   private String currency = null;
+
+  @SerializedName("metadata")
+  private Object metadata = null;
 
   @SerializedName("paymentToolToken")
   private String paymentToolToken = null;
@@ -219,6 +222,24 @@ import java.time.OffsetDateTime;
   public void setCurrency(String currency) {
     this.currency = currency;
   }
+  public Payment metadata(Object metadata) {
+    this.metadata = metadata;
+    return this;
+  }
+
+  
+
+  /**
+  * Связанные с платежом метаданные
+  * @return metadata
+  **/
+  @Schema(description = "Связанные с платежом метаданные")
+  public Object getMetadata() {
+    return metadata;
+  }
+  public void setMetadata(Object metadata) {
+    this.metadata = metadata;
+  }
   public Payment paymentToolToken(String paymentToolToken) {
     this.paymentToolToken = paymentToolToken;
     return this;
@@ -342,6 +363,7 @@ import java.time.OffsetDateTime;
         Objects.equals(this.error, payment.error) &&
         Objects.equals(this.amount, payment.amount) &&
         Objects.equals(this.currency, payment.currency) &&
+        Objects.equals(this.metadata, payment.metadata) &&
         Objects.equals(this.paymentToolToken, payment.paymentToolToken) &&
         Objects.equals(this.paymentSession, payment.paymentSession) &&
         Objects.equals(this.contactInfo, payment.contactInfo) &&
@@ -352,7 +374,7 @@ import java.time.OffsetDateTime;
 
   @Override
   public int hashCode() {
-    return java.util.Objects.hash(id, createdAt, status, error, amount, currency, paymentToolToken, paymentSession, contactInfo, ip, fingerprint, payer);
+    return java.util.Objects.hash(id, createdAt, status, error, amount, currency, metadata, paymentToolToken, paymentSession, contactInfo, ip, fingerprint, payer);
   }
 
   @Override
@@ -366,6 +388,7 @@ import java.time.OffsetDateTime;
     sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
     sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
+    sb.append("    metadata: ").append(toIndentedString(metadata)).append("\n");
     sb.append("    paymentToolToken: ").append(toIndentedString(paymentToolToken)).append("\n");
     sb.append("    paymentSession: ").append(toIndentedString(paymentSession)).append("\n");
     sb.append("    contactInfo: ").append(toIndentedString(contactInfo)).append("\n");

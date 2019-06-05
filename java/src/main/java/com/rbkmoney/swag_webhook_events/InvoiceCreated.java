@@ -28,7 +28,7 @@ import java.time.OffsetDateTime;
  * Событие о создании нового инвойса
  */
 @Schema(description = "Событие о создании нового инвойса")
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T14:43:15.170+03:00[Europe/Moscow]")public class InvoiceCreated extends Event {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2019-06-05T17:32:34.908+03:00[Europe/Moscow]")public class InvoiceCreated extends Event {
 
   @SerializedName("invoice")
   private Invoice invoice = null;
