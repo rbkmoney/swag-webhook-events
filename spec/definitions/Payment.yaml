@@ -9,6 +9,7 @@ required:
   - paymentSession
   - contactInfo
   - payer
+  - fee
 properties:
   id:
     description: Идентификатор платежа
@@ -83,3 +84,6 @@ properties:
     type: string
   payer:
     $ref: '#/definitions/Payer'
+  fee:
+    type: integer
+    format: int64
