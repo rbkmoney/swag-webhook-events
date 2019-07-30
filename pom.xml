@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>swag-webhook-events</artifactId>
-    <version>-server</version>
+    <version>SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
