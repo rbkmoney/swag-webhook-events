@@ -32,4 +32,4 @@ properties:
     type: string
   bankName:
     description: Наименование банка
-    type: String
+    type: string
