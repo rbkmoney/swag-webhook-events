@@ -30,6 +30,14 @@ properties:
   issuerCountry:
     description: Страна эмитент (alpha-3 код по стандарту ISO_3166-1)
     type: String
+    example:
+      - 'RUS'
+      - 'POL'
+      - 'USA'
   bankName:
     description: Наименование банка
     type: String
+    example:
+      - 'SBERBANK OF RUSSIA'
+      - 'JOINT STOCK COMPANY ALFA-BANK'
+      - 'VTB BANK OJSC'
