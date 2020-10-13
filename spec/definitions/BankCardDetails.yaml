@@ -29,14 +29,14 @@ properties:
       - samsungpay
   issuerCountry:
     description: Страна эмитент (alpha-3 код по стандарту ISO_3166-1)
-    type: String
+    type: string
     example:
       - 'RUS'
       - 'POL'
       - 'USA'
   bankName:
     description: Наименование банка
-    type: String
+    type: string
     example:
       - 'SBERBANK OF RUSSIA'
       - 'JOINT STOCK COMPANY ALFA-BANK'
