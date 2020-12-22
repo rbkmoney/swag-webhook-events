@@ -27,6 +27,7 @@ properties:
       - applepay
       - googlepay
       - samsungpay
+      - yandexpay
   issuerCountry:
     description: Страна эмитент (alpha-3 код по стандарту ISO_3166-1)
     type: string
