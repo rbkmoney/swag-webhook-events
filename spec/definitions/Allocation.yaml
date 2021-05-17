@@ -1,0 +1,10 @@
+description: Сплит-платеж
+type: object
+required:
+  - transactions
+properties:
+  transactions:
+    type: array
+    description: Список транзакций в сплит-платеже
+    items:
+      $ref: '#/definitions/AllocationTransaction'

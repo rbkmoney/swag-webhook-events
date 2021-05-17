@@ -1,0 +1,23 @@
+description: Содержимое сплит-транзакции
+type: object
+required:
+  - feeTarget
+  - total
+  - feeAmount
+properties:
+  feeTarget:
+    description: По этому назначению переводится часть денежных средств.
+    $ref: '#/definitions/AllocationTransactionTarget'
+  total:
+    description: Общая сумма денежных средств транзакции.
+    type: integer
+    format: int64
+    minimum: 1
+  feeAmount:
+    description: Комиссия вычитаемая из общей суммы, будет переведена по назначению.
+    type: integer
+    format: int64
+  fee:
+    description: |
+      Описывает комиссию в относительных величинах в том случае, если был использован вариант с share.
+    $ref: '#/definitions/AllocationTransactionFeeShare'

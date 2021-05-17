@@ -1,0 +1,7 @@
+type: object
+description: Назначение перевода части денежных средств
+properties:
+  target:
+    type: string
+    enum:
+      - AllocationTransactionTargetShop

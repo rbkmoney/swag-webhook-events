@@ -53,3 +53,6 @@ properties:
     description: >
       Уникальный номер транзакции в системе авторизации и расчетов обслуживающего банка
     type: string
+  allocation:
+    description: Сплит-платеж для нескольких магазинов
+    $ref: '#/definitions/Allocation'

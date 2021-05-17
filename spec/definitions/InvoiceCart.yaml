@@ -1,0 +1,10 @@
+description:  Список товаров или услуг
+type: object
+required:
+  - lines
+properties:
+  lines:
+    type: array
+    description: Позиция товара или услуги
+    items:
+      $ref: '#/definitions/InvoiceLine'

@@ -1,0 +1,16 @@
+allOf:
+  - $ref: '#/definitions/AllocationTransactionTarget'
+  - type: object
+    description: Данные клиентского устройства плательщика
+    required:
+      - ownerID
+      - shopID
+    properties:
+      ownerID:
+        description: Идентификатор мерчанта
+        type: string
+        format: string
+      shopID:
+        description: Идентификатор магазина
+        type: string
+        format: string

@@ -1,0 +1,6 @@
+description: Детали сплит-транзакции
+type: object
+properties:
+  cart:
+    description: Список товаров или услуг
+    $ref: '#/definitions/InvoiceCart'

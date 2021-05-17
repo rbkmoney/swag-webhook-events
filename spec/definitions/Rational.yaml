@@ -1,0 +1,14 @@
+description: Рациональное число
+type: object
+required:
+  - p
+  - q
+properties:
+  p:
+    description: числитель
+    type: integer
+    format: i64
+  q:
+    description: знаменатель
+    type: integer
+    format: i64

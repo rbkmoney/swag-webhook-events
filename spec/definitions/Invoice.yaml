@@ -67,3 +67,6 @@ properties:
     maxItems: 100
     items:
       $ref: '#/definitions/InvoiceCartLine'
+  allocation:
+    description: Сплит-платеж для нескольких магазинов
+    $ref: '#/definitions/Allocation'
