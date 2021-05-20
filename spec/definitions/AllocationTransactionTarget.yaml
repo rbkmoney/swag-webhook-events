@@ -1,7 +1,10 @@
 type: object
 description: Назначение перевода части денежных средств
+discriminator: allocationTransactionTargetShop
+required:
+  - allocationTransactionTargetType
 properties:
-  target:
+  allocationTransactionTargetType:
     type: string
     enum:
       - AllocationTransactionTargetShop
