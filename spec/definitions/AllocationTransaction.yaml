@@ -1,26 +1,17 @@
-description: Единица распределения денежных средств в сплит-платеже
+description: Транзакция распределения денежных средств
 type: object
+discriminator: allocationBodyType
 required:
-  - id
   - target
-  - amount
+  - allocationBodyType
 properties:
-  id:
-    description: Идентификатор единицы распределения денежных средств
-    type: string
-    format: string
   target:
-    description: По этому назначению переводится часть денежных средств.
-    $ref: '#/definitions/AllocationTransactionTarget'
-  amount:
-    description: Сумма, которая будет переведена по назначению.
-    type: integer
-    format: int64
-    minimum: 1
-  body:
-    description: |
-      Описывает содержимое сплит-транзакции в том случае, если был использован вариант с total
-    $ref: '#/definitions/AllocationTransactionBodyTotal'
-  details:
-    description: Детали транзакции
-    $ref: '#/definitions/AllocationTransactionDetails'
+    $ref: '#/definitions/AllocationTarget'
+  allocationBodyType:
+    description: Тело транзакции
+    type: string
+    enum:
+      - AllocationBodyAmount
+      - AllocationBodyTotal
+  cart:
+    $ref: '#/definitions/InvoiceCart'

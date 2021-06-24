@@ -68,5 +68,6 @@ properties:
     items:
       $ref: '#/definitions/InvoiceCartLine'
   allocation:
-    description: Сплит-платеж для нескольких магазинов
+    description: |
+        Итоговое распределение денежных средств
     $ref: '#/definitions/Allocation'

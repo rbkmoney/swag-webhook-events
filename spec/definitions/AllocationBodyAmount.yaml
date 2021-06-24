@@ -1,0 +1,22 @@
+description: Тело транзакции в абсолютных значениях
+allOf:
+  - $ref: '#/definitions/AllocationTransaction'
+  - type: object
+    required:
+      - amount
+      - currency
+    properties:
+      amount:
+        description: >
+          Сумма перечисляемая выбранному назначению в минорных денежных
+          единицах,
+          например в копейках в случае указания российских рублей в качестве
+          валюты.
+        type: integer
+        format: int64
+        minimum: 1
+      currency:
+        description: |
+          Валюта, символьный код согласно
+          [RFC 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+        type: string
