@@ -23,7 +23,6 @@ allOf:
         type: integer
         format: int64
         minimum: 1
-        readOnly: true
       currency:
         description: |
           Валюта, символьный код согласно
