@@ -67,3 +67,7 @@ properties:
     maxItems: 100
     items:
       $ref: '#/definitions/InvoiceCartLine'
+  allocation:
+    description: |
+        Итоговое распределение денежных средств
+    $ref: '#/definitions/Allocation'
